@@ -1,0 +1,200 @@
+{
+    // Thin task layer over tools/*.py. Every task shells out to an
+    // existing script -- no logic lives here.
+    //
+    // "${file}" is the open editor. tools/common.resolve_problem() turns
+    // it into a problem folder and refuses anything outside problems/,
+    // so a task fired with the wrong file open fails instead of touching
+    // another problem.
+    //
+    // Command Palette: "Tasks: Run Task" -> pick a DSA task.
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}"
+    },
+    "tasks": [
+        {
+            "label": "DSA: New Problem",
+            "detail": "Scaffold a new problem and open it.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/new_problem.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Run Current Problem",
+            "detail": "Compile and run the open solution, and record the attempt.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/run.py",
+                "${file}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": true,
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "DSA: Sync Current Problem",
+            "detail": "Copy the open solution's header into its README.md.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/sync_readme.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Mark Solved",
+            "detail": "Mark the open problem solved (after the judge accepts it).",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/status.py",
+                "solved",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Mark Revisit",
+            "detail": "Flag the open problem for another pass later.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/status.py",
+                "revisit",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Show Status",
+            "detail": "Show the open problem's metadata.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/status.py",
+                "show",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Validate Current Problem",
+            "detail": "Check the open problem's metadata, docs and markers.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/check.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Validate Repository",
+            "detail": "Check every problem and the global index.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/check.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: List Problems",
+            "detail": "Show every problem with its status.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/status.py",
+                "list"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Sync All Problems",
+            "detail": "Re-sync every README.md and rebuild PROBLEMS.md.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/sync_readme.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Migrate Old Problems",
+            "detail": "Backfill problem.json / README.md for older folders.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/migrate.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

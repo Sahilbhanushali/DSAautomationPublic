@@ -1,0 +1,40 @@
+{
+    // Run on Save (emeraldwalk.RunOnSave) does the bookkeeping on every
+    // save, so no task or shortcut is needed for the normal workflow.
+    //
+    // Rule 1: saving a solution syncs its README, promotes Not Started
+    //         to In Progress, and rebuilds PROBLEMS.md.
+    // Rule 2: saving a problem.json by hand rebuilds PROBLEMS.md.
+    //
+    // No loop is possible: the rules only match files these scripts do
+    // not write from the editor, and README.md / PROBLEMS.md match
+    // nothing at all.
+    //
+    // If the extension is ever removed, nothing breaks -- use
+    // "DSA: Sync Current Problem" (ctrl+alt+s) or run
+    //     python3 tools/sync_readme.py
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "problems[\\\\/].+\\.(cpp|py|java)$",
+                "cmd": "python3 \"${workspaceFolder}/tools/sync_readme.py\" \"${file}\"",
+                "isAsync": true
+            },
+            {
+                "match": "problems[\\\\/].+[\\\\/]problem\\.json$",
+                "cmd": "python3 \"${workspaceFolder}/tools/sync_index.py\"",
+                "isAsync": true
+            }
+        ]
+    },
+
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+
+    // The runner builds in a temp directory, so these never appear in
+    // the repo -- listed only in case a manual g++/javac run leaves one.
+    "files.watcherExclude": {
+        "**/__pycache__/**": true
+    }
+}
