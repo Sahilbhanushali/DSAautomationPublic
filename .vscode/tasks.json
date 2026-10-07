@@ -7,7 +7,17 @@
     // so a task fired with the wrong file open fails instead of touching
     // another problem.
     //
-    // Command Palette: "Tasks: Run Task" -> pick a DSA task.
+    // Three ways to run these:
+    //   - status bar buttons (extension: actboy168.tasks)
+    //   - keyboard shortcuts (user keybindings.json)
+    //   - Command Palette -> "Tasks: Run Task"
+    //
+    // options.statusbar makes a task a button. "hide": false is required
+    // because settings.json sets tasks.statusbar.default.hide to true,
+    // so a task is button-less unless it opts in. "filePattern" is a
+    // JavaScript regex tested against the active file's full path: the
+    // per-problem buttons disappear when the focused file is not inside
+    // problems/<category>/<problem>/.
     "version": "2.0.0",
     "options": {
         "cwd": "${workspaceFolder}"
@@ -21,6 +31,14 @@
             "args": [
                 "${workspaceFolder}/tools/new_problem.py"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(add) New",
+                    "detail": "DSA: create a new problem"
+                }
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "shared",
@@ -37,6 +55,18 @@
                 "${workspaceFolder}/tools/run.py",
                 "${file}"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(play) Run",
+                    "detail": "DSA: compile, run and record an attempt",
+                    "filePattern": "problems[/\\\\].+[/\\\\]",
+                    "running": {
+                        "label": "$(sync~spin) Running"
+                    }
+                }
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -52,21 +82,6 @@
             ]
         },
         {
-            "label": "DSA: Sync Current Problem",
-            "detail": "Copy the open solution's header into its README.md.",
-            "type": "shell",
-            "command": "python3",
-            "args": [
-                "${workspaceFolder}/tools/sync_readme.py",
-                "${file}"
-            ],
-            "presentation": {
-                "reveal": "silent",
-                "panel": "shared"
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "DSA: Mark Solved",
             "detail": "Mark the open problem solved (after the judge accepts it).",
             "type": "shell",
@@ -76,6 +91,15 @@
                 "solved",
                 "${file}"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(check) Solved",
+                    "detail": "DSA: mark this problem solved",
+                    "filePattern": "problems[/\\\\].+[/\\\\]"
+                }
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "shared",
@@ -94,6 +118,15 @@
                 "revisit",
                 "${file}"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(history) Revisit",
+                    "detail": "DSA: flag this problem for another pass",
+                    "filePattern": "problems[/\\\\].+[/\\\\]"
+                }
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "shared",
@@ -112,6 +145,15 @@
                 "show",
                 "${file}"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(info) Status",
+                    "detail": "DSA: show this problem's metadata",
+                    "filePattern": "problems[/\\\\].+[/\\\\]"
+                }
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "shared",
@@ -121,7 +163,58 @@
             "problemMatcher": []
         },
         {
+            "label": "DSA: Validate Repository",
+            "detail": "Check every problem and the global index.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/check.py"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": false,
+                    "label": "$(checklist) Check",
+                    "detail": "DSA: validate every problem and the index"
+                }
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "DSA: Sync Current Problem",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "detail": "Copy the open solution's header into its README.md.",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/tools/sync_readme.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "DSA: Validate Current Problem",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
+            },
             "detail": "Check the open problem's metadata, docs and markers.",
             "type": "shell",
             "command": "python3",
@@ -137,23 +230,13 @@
             "problemMatcher": []
         },
         {
-            "label": "DSA: Validate Repository",
-            "detail": "Check every problem and the global index.",
-            "type": "shell",
-            "command": "python3",
-            "args": [
-                "${workspaceFolder}/tools/check.py"
-            ],
-            "group": "test",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
-                "clear": true
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "DSA: List Problems",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
+            },
             "detail": "Show every problem with its status.",
             "type": "shell",
             "command": "python3",
@@ -170,6 +253,12 @@
         },
         {
             "label": "DSA: Sync All Problems",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
+            },
             "detail": "Re-sync every README.md and rebuild PROBLEMS.md.",
             "type": "shell",
             "command": "python3",
@@ -184,6 +273,12 @@
         },
         {
             "label": "DSA: Migrate Old Problems",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true
+                }
+            },
             "detail": "Backfill problem.json / README.md for older folders.",
             "type": "shell",
             "command": "python3",

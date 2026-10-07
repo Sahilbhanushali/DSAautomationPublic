@@ -1,0 +1,14 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Local test input for a problem -- keep it out of history unless you
+# deliberately add it with: git add -f problems/.../input.txt
+# input.txt
+
+# Build artifacts, in case a manual g++/javac run leaves one behind
+# (tools/run.py builds in a temp directory, so normally there are none)
+*.o
+*.out
+*.class
+a.out

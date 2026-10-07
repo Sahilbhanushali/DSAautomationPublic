@@ -1,0 +1,12 @@
+{
+    // VS Code offers to install these when the folder is opened.
+    // Neither is required: without them the tasks still run from the
+    // Command Palette and the keyboard shortcuts, and the Python tools
+    // work from any terminal.
+    "recommendations": [
+        // Status bar buttons for the DSA tasks.
+        "actboy168.tasks",
+        // Runs tools/sync_readme.py on every solution save.
+        "emeraldwalk.runonsave"
+    ]
+}

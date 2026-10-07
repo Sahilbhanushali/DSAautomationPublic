@@ -69,8 +69,26 @@ does not count as an attempt, and a passing local run never sets
 Everything is a task in `.vscode/tasks.json` — a thin layer that shells
 out to `tools/*.py`. No extension of our own, no duplicated logic.
 
-Reach them from the Command Palette: `Ctrl+Shift+P` → **Tasks: Run
-Task** → pick a `DSA:` task. Or use the shortcut.
+Three ways to run them: **click a status bar button**, press a shortcut,
+or `Ctrl+Shift+P` → **Tasks: Run Task** → pick a `DSA:` task.
+
+### Status bar buttons
+
+Along the bottom of the window (extension: `actboy168.tasks`):
+
+```
+⊕ New   ▶ Run   ✔ Solved   ↻ Revisit   ⓘ Status   ☑ Check
+```
+
+The four middle ones act on the problem you have open, so they only
+appear when the focused file is inside `problems/<category>/<problem>/`.
+Open `tools/run.py` or the root `README.md` and they disappear, leaving
+just *New* and *Check* — you cannot click them at a moment when they'd
+act on the wrong problem.
+
+A task becomes a button via `options.statusbar` in `tasks.json`;
+`settings.json` sets `tasks.statusbar.default.hide` to `true`, so new
+tasks stay button-less until they opt in with `"hide": false`.
 
 | Shortcut | Task | Acts on |
 |---|---|---|

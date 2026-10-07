@@ -28,6 +28,16 @@
         ]
     },
 
+    // Status bar buttons: extension actboy168.tasks.
+    //
+    // Deliberately NOT setting "tasks.statusbar.default.hide": true here.
+    // That setting is the fallback when a task has no options.statusbar
+    // block, so turning it on means any task the extension fails to read
+    // disappears silently -- and you end up with an empty status bar and
+    // nothing to debug. The tasks we don't want as buttons set
+    // "hide": true individually in tasks.json instead, so the worst case
+    // is too many buttons rather than none.
+
     "files.exclude": {
         "**/__pycache__": true
     },
